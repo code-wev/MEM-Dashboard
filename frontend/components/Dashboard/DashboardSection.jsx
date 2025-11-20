@@ -164,9 +164,11 @@ export default function DashboardSection() {
               Generate report
             </button>
 
-            <button className="w-full bg-[#00796B] text-white py-2.5 rounded-md font-medium text-[15px] mt-2">
-              Open AI Chat
-            </button>
+            <Link href="ai">
+              <button className="w-full bg-[#00796B] text-white py-2.5 rounded-md font-medium text-[15px] mt-2">
+                Open AI Chat
+              </button>
+            </Link>
           </div>
         </div>
       </div>
