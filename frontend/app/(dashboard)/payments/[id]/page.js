@@ -1,32 +1,63 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FiArrowLeft, FiDownload, FiEdit } from "react-icons/fi";
 
-const payments = [
-  {
-    id: "TXN001",
-    customerName: "John Smith",
-    email: "johnsmith@gmail.com",
-    amount: "$1,250.00",
-    status: "Success",
-    paymentId: "PAY001",
-    transactionId: "TXN-121542245",
-    method: "Credit Card",
-    date: "2025-01-15",
-    description: "Monthly subscription payment",
-  },
-];
+/* ---------- STATUS COLORS ---------- */
+const statusColors = {
+  Success: "bg-[#E6F8ED] text-[#2E8E4D]",
+  Pending: "bg-[#FFF8D9] text-[#C89A00]",
+  Fail: "bg-[#FFE5E5] text-[#D64040]",
+};
 
 export default function PaymentDetailsPage() {
-  const params = useParams();
+  const { id } = useParams();
   const router = useRouter();
-  const payment = payments[0];
+
+  const [payment, setPayment] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  /* ---------- FETCH PAYMENT ---------- */
+  useEffect(() => {
+    async function fetchPayment() {
+      try {
+        const res = await fetch(`/api/payments/${id}`);
+
+        if (!res.ok) throw new Error("Failed to load payment");
+
+        const data = await res.json();
+        setPayment(data);
+      } catch (err) {
+        setError("Unable to load payment details");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchPayment();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="mt-10 text-center text-gray-500">
+        Loading payment details...
+      </div>
+    );
+  }
+
+  if (error || !payment) {
+    return (
+      <div className="mt-10 text-center text-red-500">
+        {error || "Payment not found"}
+      </div>
+    );
+  }
 
   return (
-    <div className="w-full mt-10"> 
-      {/* Header */}
+    <div className="w-full mt-10">
+      {/* ================= HEADER ================= */}
       <div className="flex items-center gap-2 mb-6">
         <button
           onClick={() => router.back()}
@@ -36,52 +67,72 @@ export default function PaymentDetailsPage() {
         </button>
         <h1 className="text-[19px] font-semibold ml-1">Payment Details</h1>
       </div>
+
+      {/* ================= DETAILS CARD ================= */}
       <div className="bg-white border border-[#E5E7EB] rounded-xl p-6 shadow-sm">
-        {/* 2 column layout */}
+        {/* 2 COLUMN GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <Field label="Customer Name" value={payment.customerName} />
-          <Field label="Payment ID" value={payment.paymentId} />
+          <Field label="Payment ID" value={payment._id} />
 
           <Field label="Email" value={payment.email} />
-          <Field label="Transaction ID" value={payment.transactionId} />
+          <Field
+            label="Transaction ID"
+            value={payment._id.slice(-10).toUpperCase()}
+          />
 
-          <Field label="Amount" value={payment.amount} bold />
+          <Field
+            label="Amount"
+            value={`$${Number(payment.amount).toFixed(2)}`}
+            bold
+          />
 
           <Field label="Payment Method" value={payment.method} />
 
-          {/* Status badge */}
+          {/* STATUS */}
           <div className="flex flex-col">
             <span className="text-[13px] text-[#6B7280] mb-1">Status</span>
-
-            <div className="w-full border border-[#E5E7EB] rounded-md bg-white px-3 py-2 flex items-center">
-              <span className="bg-[#E6F8ED] text-[#2E8E4D] px-3 py-1 rounded-full text-[12px] font-medium">
+            <div className="w-full border border-[#E5E7EB] rounded-md bg-white px-3 py-2">
+              <span
+                className={`px-3 py-1 rounded-full text-[12px] font-medium ${
+                  statusColors[payment.status]
+                }`}
+              >
                 {payment.status}
               </span>
             </div>
           </div>
 
-          <Field label="Date" value={payment.date} />
+          <Field
+            label="Date"
+            value={new Date(payment.createdAt).toLocaleDateString()}
+          />
         </div>
 
-        {/* Description */}
-        <div className="mb-6">
-          <span className="text-[14px] font-semibold mb-1 block">
-            Description
-          </span>
-          <div className=" text-[14px] text-[#374151]">
-            {payment.description}
+        {/* DESCRIPTION */}
+        {payment.description && (
+          <div className="mb-6">
+            <span className="text-[14px] font-semibold mb-1 block">
+              Description
+            </span>
+            <div className="text-[14px] text-[#374151]">
+              {payment.description}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Buttons */}
+      {/* ================= ACTION BUTTONS ================= */}
       <div className="flex flex-wrap mt-5 gap-3">
         <button className="inline-flex items-center gap-2 bg-[#00796B] text-white px-5 py-2.5 rounded-md text-[14px] font-medium hover:bg-[#006458] transition">
           <FiDownload className="text-[17px]" />
           Download Receipt
         </button>
 
-        <button className="inline-flex items-center gap-2 border border-[#00796B] text-[#00796B] px-5 py-2.5 rounded-md text-[14px] font-medium hover:bg-[#E6F4F1] transition">
+        <button
+          onClick={() => router.push(`/payments/edit/${payment._id}`)}
+          className="inline-flex items-center gap-2 border border-[#00796B] text-[#00796B] px-5 py-2.5 rounded-md text-[14px] font-medium hover:bg-[#E6F4F1] transition"
+        >
           <FiEdit className="text-[17px]" />
           Edit Payment
         </button>
@@ -90,7 +141,7 @@ export default function PaymentDetailsPage() {
   );
 }
 
-/* ========================== FIELD COMPONENT ========================== */
+/* ================= FIELD COMPONENT ================= */
 
 function Field({ label, value, bold }) {
   return (
