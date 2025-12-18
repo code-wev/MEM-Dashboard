@@ -62,12 +62,10 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen bg-[#F4F5F7] flex relative">
-
       {/* LEFT TEAL STRIPE */}
       <div className="absolute left-0 top-0 h-full w-[10px] bg-[#00796B]" />
 
       <div className="flex flex-col flex-1">
-
         {/* TOP LOGO BAR */}
         <div className="w-full flex items-center justify-between px-10 py-6">
           <Link href="/">
@@ -94,7 +92,6 @@ export default function RegisterPage() {
         {/* REGISTER CARD */}
         <div className="flex flex-1 items-center justify-center pb-10">
           <div className="bg-white w-[450px] rounded-xl shadow-[0_4px_25px_rgba(0,0,0,0.08)] px-10 py-10">
-
             <h1 className="text-center text-[22px] font-semibold mb-8">
               Create Your Account
             </h1>
@@ -106,7 +103,6 @@ export default function RegisterPage() {
             )}
 
             <form className="space-y-5" onSubmit={handleRegister}>
-
               {/* FULL NAME */}
               <div>
                 <label className="text-[13px] text-gray-600">Full Name</label>
@@ -191,7 +187,6 @@ export default function RegisterPage() {
                 Sign in
               </Link>
             </div>
-
           </div>
         </div>
       </div>
