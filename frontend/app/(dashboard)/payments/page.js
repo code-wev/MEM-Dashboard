@@ -19,7 +19,7 @@ const methodOptions = [
   "Credit Card",
   "Bank Transfer",
   "PayPal",
-  "Cash", // ✅ FIX
+  "Cash",
 ];
 
 export default function PaymentsPage() {

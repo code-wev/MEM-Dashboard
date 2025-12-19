@@ -16,7 +16,7 @@ export default function AddPaymentPage() {
   const [status, setStatus] = useState("Pending");
   const [sendReceipt, setSendReceipt] = useState(true);
 
-  const methods = ["Credit Card", "Bank Transfer", "PayPal", "Cash"]; // ✅ FIX
+  const methods = ["Credit Card", "Bank Transfer", "PayPal", "Cash"]; 
   const statuses = ["Pending", "Success", "Fail"];
 
   async function handleSave() {
