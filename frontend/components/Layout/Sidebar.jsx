@@ -36,20 +36,23 @@ export default function Sidebar({ className = "" }) {
   const isActive = (path) => pathname === path;
 
   return (
-      <aside
-      className={`h-screen w-[280px] bg-[#00796B] flex flex-col items-center text-[#DFDAB7] shadow-lg ${className}`}>
+    <aside
+      className={`h-screen w-[280px] bg-[#00796B] flex flex-col items-center text-[#DFDAB7] shadow-lg ${className}`}
+    >
       {/* Logo Section */}
-      <div className="flex flex-col items-center pt-6 pb-3">
-        <Image src="/logo.png" alt="MEM Logo" width={85} height={85} />
+      <Link href="/">
+        <div className="flex flex-col items-center pt-6 pb-3">
+          <Image src="/logo.png" alt="MEM Logo" width={85} height={85} />
 
-        <h2 className="text-[17px] text-white font-semibold mt-2 tracking-wide">
-          MEM Design Build
-        </h2>
+          <h2 className="text-[17px] text-white font-semibold mt-2 tracking-wide">
+            MEM Design Build
+          </h2>
 
-        <p className="text-[12px] leading-tight opacity-90 text-center w-[170px]">
-          Transforming House Into Dream Homes
-        </p>
-      </div>
+          <p className="text-[12px] leading-tight opacity-90 text-center w-[170px]">
+            Transforming House Into Dream Homes
+          </p>
+        </div>
+      </Link>
 
       {/* Divider */}
       <div className="w-full border-t border-[#DFDAB7] mt-3"></div>

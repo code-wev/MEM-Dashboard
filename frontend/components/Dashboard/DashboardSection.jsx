@@ -32,9 +32,7 @@ export default function DashboardSection() {
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 w-full mt-6">
       {/* LEFT TABLE */}
       <div className="lg:col-span-2 bg-white border border-[#E5E7EB] rounded-xl p-5 shadow-sm">
-        <h2 className="text-[20px] font-semibold mb-4">
-          Latest Transactions
-        </h2>
+        <h2 className="text-[20px] font-semibold mb-4">Latest Transactions</h2>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left">
@@ -50,48 +48,61 @@ export default function DashboardSection() {
             </thead>
 
             <tbody className="text-[14px]">
-              {transactions.map((txn) => (
-                <tr
-                  key={txn._id}
-                  className="border-t border-[#F0F0F0] hover:bg-gray-50 transition"
-                >
-                  <td className="py-3">
-                    <div className="flex flex-col">
-                      <span className="font-medium">{txn.customerName}</span>
-                      <span className="text-[#6B7280] text-[12px]">
-                        {txn._id.slice(-6).toUpperCase()}
-                      </span>
-                    </div>
-                  </td>
-
-                  <td className="font-medium">
-                    ${Number(txn.amount).toFixed(2)}
-                  </td>
-
-                  <td>
-                    <span
-                      className={`px-3 py-1 rounded-full text-[12px] font-medium ${statusColors[txn.status]}`}
-                    >
-                      {txn.status}
-                    </span>
-                  </td>
-
-                  <td>
-                    {new Date(txn.createdAt).toISOString().split("T")[0]}
-                  </td>
-
-                  <td>{txn.method}</td>
-
-                  <td>
-                    <Link
-                      href={`/payments/${txn._id}`}
-                      className="text-[#15803D] font-semibold hover:underline"
-                    >
-                      View
-                    </Link>
+              {transactions.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="py-10 text-center text-[#6B7280] text-[15px]"
+                  >
+                    No payments found yet.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                transactions.map((txn) => (
+                  <tr
+                    key={txn._id}
+                    className="border-t border-[#F0F0F0] hover:bg-gray-50 transition"
+                  >
+                    <td className="py-3">
+                      <div className="flex flex-col">
+                        <span className="font-medium">{txn.customerName}</span>
+                        <span className="text-[#6B7280] text-[12px]">
+                          {txn._id.slice(-6).toUpperCase()}
+                        </span>
+                      </div>
+                    </td>
+
+                    <td className="font-medium">
+                      ${Number(txn.amount).toFixed(2)}
+                    </td>
+
+                    <td>
+                      <span
+                        className={`px-3 py-1 rounded-full text-[12px] font-medium ${
+                          statusColors[txn.status]
+                        }`}
+                      >
+                        {txn.status}
+                      </span>
+                    </td>
+
+                    <td>
+                      {new Date(txn.createdAt).toISOString().split("T")[0]}
+                    </td>
+
+                    <td>{txn.method}</td>
+
+                    <td>
+                      <Link
+                        href={`/payments/${txn._id}`}
+                        className="text-[#15803D] font-semibold hover:underline"
+                      >
+                        View
+                      </Link>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
@@ -103,14 +114,16 @@ export default function DashboardSection() {
           <h2 className="text-[17px] font-semibold mb-3">Quick Action</h2>
 
           <Link href="/payments/add">
-            <button className="w-full bg-[#00796B] text-white py-2.5 rounded-md font-medium text-[15px]">
+            <button className="w-full cursor-pointer bg-[#00796B] text-white py-2.5 rounded-md font-medium text-[15px]">
               Add Payment
             </button>
           </Link>
 
-          <button className="w-full border border-[#00796B] text-[#00796B] py-2.5 rounded-md font-medium mt-3 text-[15px]">
-            Send Email
-          </button>
+          <Link href="/send-email">
+            <button className="w-full cursor-pointer border border-[#00796B] text-[#00796B] py-2.5 rounded-md font-medium mt-3 text-[15px]">
+              Send Email
+            </button>
+          </Link>
         </div>
 
         <div className="bg-white border border-[#E5E7EB] rounded-xl p-5 shadow-sm">
@@ -131,7 +144,7 @@ export default function DashboardSection() {
             </button>
 
             <Link href="/ai">
-              <button className="w-full bg-[#00796B] text-white py-2.5 rounded-md font-medium text-[15px] mt-2">
+              <button className="w-full cursor-pointer bg-[#00796B] text-white py-2.5 rounded-md font-medium text-[15px] mt-2">
                 Open AI Chat
               </button>
             </Link>

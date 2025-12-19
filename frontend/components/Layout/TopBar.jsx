@@ -30,7 +30,6 @@ export default function TopBar({ onOpenSidebar }) {
 
   return (
     <div className="w-full bg-[#FFFFFF] shadow-[0px_4px_12px_0px_#0000001A] rounded-xl px-6 py-4 flex items-center justify-between relative">
-      
       {/* LEFT SIDE */}
       <div className="flex items-center gap-3">
         <button
@@ -40,9 +39,11 @@ export default function TopBar({ onOpenSidebar }) {
           <FiMenu size={24} />
         </button>
 
-        <h2 className="text-[#000000] hidden md:flex text-2xl font-semibold">
-          Dashboard
-        </h2>
+        <Link href="/">
+          <h2 className="text-[#000000] hidden md:flex text-2xl font-semibold">
+            Dashboard
+          </h2>
+        </Link>
       </div>
 
       {/* RIGHT SIDE: PROFILE */}
