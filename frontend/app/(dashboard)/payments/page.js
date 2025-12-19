@@ -33,25 +33,29 @@ export default function PaymentsPage() {
 
   /* ---------- FETCH PAYMENTS ---------- */
   useEffect(() => {
-    async function fetchPayments() {
-      try {
-        const res = await fetch("/api/payments");
+  async function fetchPayments() {
+    try {
+      const res = await fetch("/api/payments", {
+        method: "GET",
+        credentials: "include", 
+        cache: "no-store",     
+      });
 
-        if (!res.ok) {
-          throw new Error("Failed to load payments");
-        }
-
-        const data = await res.json();
-        setPayments(Array.isArray(data) ? data : []);
-      } catch (err) {
-        setError("Unable to load payments");
-      } finally {
-        setLoading(false);
+      if (!res.ok) {
+        throw new Error("Failed to load payments");
       }
-    }
 
-    fetchPayments();
-  }, []);
+      const data = await res.json();
+      setPayments(Array.isArray(data) ? data : []);
+    } catch (err) {
+      setError("Unable to load payments");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  fetchPayments();
+}, []);
 
   /* ---------- FILTER LOGIC ---------- */
   const filteredPayments = payments.filter((p) => {
